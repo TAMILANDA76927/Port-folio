@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PARIVALLAL M V</title>
+
+<style>
+:root{
+--bg:linear-gradient(135deg,#050505,#120016);
+--a1:#c7f9cc;
+--a2:#b5179e;
+--box:rgba(255,255,255,.03);
+--glow:rgba(181,23,158,.7);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system}
+html{scroll-behavior:smooth}
+body{
+background:var(--bg);
+color:#fff;
+overflow-x:hidden;
+transition:.8s ease;
+}
+
+/* THEME SWITCH */
+#themeSwitch{
+position:fixed;
+top:18px;
+left:20px;
+width:38px;
+height:38px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+font-size:18px;
+background:linear-gradient(135deg,var(--a1),var(--a2));
+box-shadow:0 0 25px var(--glow);
+z-index:20;
+}
+
+/* ENTRY */
+.entry{
+position:fixed;
+inset:0;
+background:var(--bg);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:999;
+animation:entryFade 1.2s ease forwards;
+}
+@keyframes entryFade{100%{opacity:0;pointer-events:none}}
+
+.entry h1,
+header h2,
+#clock,
+#quoteBox,
+#visitorCount{
+background:linear-gradient(90deg,var(--a1),var(--a2));
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.entry p{letter-spacing:2px;color:#000}
+
+/* CLOCK */
+#clock{
+position:fixed;
+top:20px;
+right:24px;
+font-size:.9rem;
+opacity:.8;
+z-index:10;
+}
+
+/* CURSOR */
+.cursor{
+position:fixed;
+width:260px;
+height:260px;
+border-radius:50%;
+background:radial-gradient(circle,var(--glow),transparent 60%);
+filter:blur(35px);
+pointer-events:none;
+transform:translate(-50%,-50%);
+z-index:0;
+}
+
+/* TAP GLOW */
+.tap-glow{
+position:fixed;
+width:180px;
+height:180px;
+border-radius:50%;
+filter:blur(30px);
+transform:translate(-50%,-50%) scale(.5);
+animation:tapGlow .7s ease forwards;
+pointer-events:none;
+z-index:5;
+}
+@keyframes tapGlow{
+to{transform:translate(-50%,-50%) scale(1.6);opacity:0}
+}
+
+/* LAYOUT */
+.container{max-width:1100px;margin:auto;padding:6rem 1.5rem}
+header{text-align:center;margin-bottom:5rem}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(40px);transition:1s ease}
+.reveal.show{opacity:1;transform:none}
+
+/* SECTIONS */
+.section{
+background:var(--box);
+border-radius:26px;
+padding:3rem;
+margin-bottom:3rem;
+position:relative;
+transition:.3s ease;
+}
+.section::before{
+content:'';
+position:absolute;
+inset:0;
+border-radius:26px;
+padding:1px;
+background:linear-gradient(135deg,var(--a1),var(--a2));
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+-webkit-mask-composite:xor;
+opacity:.35;
+}
+.section.tap-active{
+transform:scale(1.06);
+box-shadow:0 0 70px var(--glow);
+}
+
+/* QUOTE */
+#quoteBox{text-align:center;margin-top:4rem;font-size:.95rem;font-style:italic;opacity:.55}
+
+/* VISITOR */
+#visitorCount{
+position:fixed;
+bottom:18px;
+left:20px;
+font-size:.75rem;
+opacity:.6;
+z-index:10;
+}
+
+footer{text-align:center;opacity:.4;padding:3rem}
+</style>
+</head>
+
+<body>
+
+<div id="themeSwitch">🎨</div>
+<div id="clock"></div>
+<div class="cursor" id="cursor"></div>
+
+<div class="entry">
+<h1>PARIVALLAL M V</h1>
+<p>CS STUDENT</p>
+</div>
+
+<div class="container">
+<header>
+<h2>Portfolio</h2>
+<p>Minimal • Gradient • Prism Style</p>
+</header>
+
+<div class="section reveal" data-color="rgba(199,249,204,.7)">
+<h3>About Me</h3>
+<p>Currently studying at Sri Ramakrishna Matriculation Higher Secondary School.</p>
+</div>
+
+<div class="section reveal" data-color="rgba(181,23,158,.7)">
+<h3>Group</h3>
+<p>Computer Science</p>
+</div>
+
+<div class="section reveal" data-color="rgba(130,87,229,.7)">
+<h3>Skills</h3>
+<p>Python (Beginner) · C++ (Beginner)</p>
+</div>
+
+<div class="section reveal" data-color="rgba(255,180,100,.7)">
+<h3>Projects</h3>
+<p>Coming soon 🚀</p>
+</div>
+
+<div id="quoteBox"><span id="quoteText"></span></div>
+</div>
+
+<footer>© 2025 PARIVALLAL M V</footer>
+<div id="visitorCount"></div>
+
+<audio id="tapSound">
+<source src="https://assets.mixkit.co/sfx/preview/mixkit-click-tone-1110.mp3">
+</audio>
+
+<script>
+/* CURSOR */
+const c=document.getElementById("cursor");
+let x=0,y=0;
+document.addEventListener("mousemove",e=>{x=e.clientX;y=e.clientY});
+(function loop(){c.style.left=x+"px";c.style.top=y+"px";requestAnimationFrame(loop)})();
+
+/* CLOCK */
+setInterval(()=>clock.innerText=new Date().toLocaleTimeString(),1000);
+
+/* REVEAL */
+addEventListener("scroll",()=>document.querySelectorAll(".reveal")
+.forEach(e=>e.getBoundingClientRect().top<innerHeight-80&&e.classList.add("show")));
+
+/* TAP */
+addEventListener("touchstart",e=>{
+const t=e.touches[0],g=document.createElement("div");
+const box=e.target.closest(".section");
+g.className="tap-glow";
+g.style.background=`radial-gradient(circle,${box?.dataset.color||'var(--glow)'},transparent 65%)`;
+g.style.left=t.clientX+"px";g.style.top=t.clientY+"px";
+document.body.appendChild(g);setTimeout(()=>g.remove(),700);
+tapSound.currentTime=0;tapSound.play().catch(()=>{});
+navigator.vibrate?.(25);
+box&&box.classList.add("tap-active");
+setTimeout(()=>box?.classList.remove("tap-active"),300);
+});
+
+/* QUOTES */
+const q=[
+"Learning never stops.",
+"Build first, perfect later.",
+"Code today, create tomorrow.",
+"Consistency beats talent."
+];
+quoteText.innerText=q[Math.random()*q.length|0];
+
+/* VISITS */
+let v=+localStorage.visits||0;
+localStorage.visits=++v;
+visitorCount.innerText="Visits: "+v;
+
+/* THEME SWITCH */
+let t=0;
+themeSwitch.onclick=()=>{
+if(!t){
+document.documentElement.style.setProperty('--bg','linear-gradient(135deg,#000428,#004e92)');
+document.documentElement.style.setProperty('--a1','#00c6ff');
+document.documentElement.style.setProperty('--a2','#0072ff');
+document.documentElement.style.setProperty('--glow','rgba(0,198,255,.9)');
+t=1;
+}else{
+document.documentElement.style.setProperty('--bg','linear-gradient(135deg,#050505,#120016)');
+document.documentElement.style.setProperty('--a1','#c7f9cc');
+document.documentElement.style.setProperty('--a2','#b5179e');
+document.documentElement.style.setProperty('--glow','rgba(181,23,158,.7)');
+t=0;
+}
+};
+</script>
+
+</body>
+  </html>
