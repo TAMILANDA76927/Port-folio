@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PARIVALLAL PORTFOLIO</title>
+
+<style>
+:root{
+--bg:linear-gradient(135deg,#050505,#120016);
+--a1:#c7f9cc;
+--a2:#b5179e;
+--glow:rgba(181,23,158,.7);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system}
+html{scroll-behavior:smooth}
+body{
+background:var(--bg);
+color:#fff;
+overflow-x:hidden;
+transition:.8s ease;
+}
+
+/* THEME SWITCH */
+#themeSwitch{
+position:fixed;
+top:18px;
+left:20px;
+width:38px;
+height:38px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+font-size:18px;
+background:linear-gradient(135deg,var(--a1),var(--a2));
+box-shadow:0 0 25px var(--glow);
+z-index:20;
+}
+
+/* ENTRY */
+.entry{
+position:fixed;
+inset:0;
+background:var(--bg);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:999;
+animation:entryFade 1.2s ease forwards;
+}
+@keyframes entryFade{100%{opacity:0;pointer-events:none}}
+
+.entry h1,
+header h2,
+#clock,
+#quoteBox,
+#visitorCount{
+background:linear-gradient(90deg,var(--a1),var(--a2));
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.entry p{letter-spacing:2px;color:#000}
+
+/* CLOCK */
+#clock{
+position:fixed;
+top:20px;
+right:24px;
+font-size:.9rem;
+opacity:.8;
+z-index:10;
+}
+
+/* CURSOR */
+.cursor{
+position:fixed;
+width:260px;
+height:260px;
+border-radius:50%;
+background:radial-gradient(circle,var(--glow),transparent 60%);
+filter:blur(35px);
+pointer-events:none;
+transform:translate(-50%,-50%);
+z-index:0;
+}
+
+/* LAYOUT */
+.container{max-width:1100px;margin:auto;padding:6rem 1.5rem}
+header{text-align:center;margin-bottom:5rem}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(40px);transition:1s ease}
+.reveal.show{opacity:1;transform:none}
+
+/* FLOWING GRADIENT SECTIONS */
+.section{
+border-radius:26px;
+padding:3rem;
+margin-bottom:3rem;
+position:relative;
+background:linear-gradient(
+120deg,
+rgba(181,23,158,.18),
+rgba(0,136,255,.18),
+rgba(0,255,200,.18),
+rgba(199,249,204,.18)
+);
+background-size:300% 300%;
+animation:gradientFlow 6s ease infinite;
+transition:.35s ease;
+}
+
+@keyframes gradientFlow{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+.section::before{
+content:'';
+position:absolute;
+inset:0;
+border-radius:26px;
+padding:1px;
+background:linear-gradient(135deg,var(--a1),var(--a2));
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+-webkit-mask-composite:xor;
+opacity:.4;
+}
+
+/* ACTIVE STATE (STAYS) */
+.section.active{
+transform:scale(1.07);
+box-shadow:
+0 0 40px var(--glow),
+0 0 80px rgba(0,136,255,.4),
+0 0 120px rgba(0,255,200,.25);
+z-index:2;
+}
+
+/* QUOTE */
+#quoteBox{
+text-align:center;
+margin-top:4rem;
+font-size:.95rem;
+font-style:italic;
+opacity:.55
+}
+
+/* VISITOR */
+#visitorCount{
+position:fixed;
+bottom:18px;
+left:20px;
+font-size:.75rem;
+opacity:.6;
+z-index:10;
+}
+
+footer{text-align:center;opacity:.4;padding:3rem}
+</style>
+</head>
+
+<body>
+
+<div id="themeSwitch">🎨</div>
+<div id="clock"></div>
+<div class="cursor" id="cursor"></div>
+
+<div class="entry">
+<h1>PARIVALLAL PORTFOLIO</h1>
+<p>C++ • PYTHON • STUDENT</p>
+</div>
+
+<div class="container">
+<header>
+<h2>PARIVALLAL PORTFOLIO</h2>
+<p>C++ • PYTHON • STUDENT</p>
+</header>
+
+<div class="section reveal">
+<h3>About Me</h3>
+<p>Currently studying at Sri Ramakrishna Matriculation Higher Secondary School.</p>
+</div>
+
+<div class="section reveal">
+<h3>Group</h3>
+<p>Computer Science</p>
+</div>
+
+<div class="section reveal">
+<h3>Skills</h3>
+<p>Python (Beginner) · C++ (Beginner)</p>
+</div>
+
+<div class="section reveal">
+<h3>Projects</h3>
+<p>Coming soon 🚀</p>
+</div>
+
+<div id="quoteBox"><span id="quoteText"></span></div>
+</div>
+
+<footer>© 2025 PARIVALLAL M V</footer>
+<div id="visitorCount"></div>
+
+<script>
+/* CURSOR */
+const c=document.getElementById("cursor");
+let x=0,y=0;
+addEventListener("mousemove",e=>{x=e.clientX;y=e.clientY});
+(function loop(){c.style.left=x+"px";c.style.top=y+"px";requestAnimationFrame(loop)})();
+
+/* CLOCK */
+setInterval(()=>clock.innerText=new Date().toLocaleTimeString(),1000);
+
+/* REVEAL */
+addEventListener("scroll",()=>document.querySelectorAll(".reveal")
+.forEach(e=>e.getBoundingClientRect().top<innerHeight-80&&e.classList.add("show")));
+
+/* ACTIVE BOX LOGIC */
+const boxes=document.querySelectorAll(".section");
+function clearActive(){boxes.forEach(b=>b.classList.remove("active"))}
+
+/* DESKTOP */
+boxes.forEach(b=>{
+b.addEventListener("mouseenter",()=>{clearActive();b.classList.add("active")});
+b.addEventListener("mouseleave",()=>b.classList.remove("active"));
+});
+
+/* MOBILE */
+addEventListener("touchstart",e=>{
+const box=e.target.closest(".section");
+clearActive();
+box && box.classList.add("active");
+navigator.vibrate?.(30);
+});
+
+/* REMOVE ON OUTSIDE TAP */
+addEventListener("click",e=>{
+!e.target.closest(".section") && clearActive();
+});
+
+/* QUOTES */
+const q=[
+"Learning never stops.",
+"Build first, perfect later.",
+"Code today, create tomorrow.",
+"Consistency beats talent."
+];
+quoteText.innerText=q[Math.random()*q.length|0];
+
+/* VISITS */
+let v=+localStorage.visits||0;
+localStorage.visits=++v;
+visitorCount.innerText="Visits: "+v;
+
+/* THEME SWITCH */
+let t=0;
+themeSwitch.onclick=()=>{
+document.documentElement.style.setProperty('--bg',t?
+'linear-gradient(135deg,#050505,#120016)':
+'linear-gradient(135deg,#000428,#004e92)');
+document.documentElement.style.setProperty('--a1',t?'#c7f9cc':'#00c6ff');
+document.documentElement.style.setProperty('--a2',t?'#b5179e':'#0072ff');
+document.documentElement.style.setProperty('--glow',t?
+'rgba(181,23,158,.7)':'rgba(0,198,255,.9)');
+t=!t;
+};
+</script>
+
+</body>
+</html>
